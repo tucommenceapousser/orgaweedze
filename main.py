@@ -2,13 +2,40 @@ import streamlit as st
 from PIL import Image
 import requests
 from io import BytesIO
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Fonction pour charger une image à partir d'une URL
 def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Chargement des images à partir des URLs
+# Fonction pour envoyer un email
+def send_email(subject, body, to_email):
+    from_email = "jelenacornut@gmail.com"  # Remplacez par votre adresse email
+    password = "B1gal2590"      # Remplacez par votre mot de passe d'email
+
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(from_email, password)
+        text = msg.as_string()
+        server.sendmail(from_email, to_email, text)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Erreur d'envoi d'email: {e}")
+        return False
+
+# Chargement des images
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
 header_image = load_image_from_url("https://j.top4top.io/p_3152e1dds3.jpeg")
 image_secure = load_image_from_url("https://i.top4top.io/p_3152ce61q2.png")
@@ -19,6 +46,7 @@ image_legal = load_image_from_url("https://h.top4top.io/p_3152nmkk21.jpeg")
 st.set_page_config(page_title="Organisation de Réseaux de Vente de Hashish premium", 
                    page_icon="https://g.top4top.io/p_3152gg9qo0.jpg", 
                    layout="centered")
+
 # Ajout des meta tags pour SEO et réseaux sociaux
 st.markdown("""
     <meta name="description" content="Service complet pour organiser et sécuriser votre réseau de distribution de hashish premium.">
@@ -88,7 +116,7 @@ st.markdown("""
 <p class="description">
 Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.
 Que vous soyez un nouveau venu ou un acteur établi sur le marché, nous vous aidons à structurer vos opérations,
-à optimiser vos routes de livraison, et à garantir une securité optimale au niveau des risques judiciaires..
+à optimiser vos routes de livraison, et à garantir une sécurité optimale au niveau des risques judiciaires..
 </p>
 """, unsafe_allow_html=True)
 
@@ -123,7 +151,13 @@ with st.form(key="contact_form"):
 
     if submit_button:
         if name and email and message:
-            st.success(f"Merci {name}, votre message a bien été envoyé. Nous vous contacterons sous peu.")
+            # Envoyer l'email
+            if send_email(subject="Nouveau message de contact", 
+                          body=f"Nom: {name}\nEmail: {email}\n\nMessage:\n{message}", 
+                          to_email="jelenacornut@gmail.com"):
+                st.success(f"Merci {name}, votre message a bien été envoyé. Nous vous contacterons sous peu.")
+            else:
+                st.error("Une erreur est survenue lors de l'envoi de votre message.")
         else:
             st.error("Veuillez remplir tous les champs.")
 
