@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 import requests
 from io import BytesIO
+from streamlit_js_eval import streamlit_js_eval
 
 # Fonction pour charger une image à partir d'une URL
 def load_image_from_url(url):
@@ -33,20 +34,6 @@ image_legal = load_image_from_url("https://h.top4top.io/p_3152nmkk21.jpeg")
 st.set_page_config(page_title="Organisation de Réseaux de Vente de Hashish premium", 
                    page_icon="https://g.top4top.io/p_3152gg9qo0.jpg", 
                    layout="centered")
-
-# Ajouter du JavaScript pour obtenir l'IP du client
-st.markdown("""
-    <script>
-        fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            // Envoyer l'IP au backend via Streamlit
-            document.getElementById("client_ip").innerText = data.ip;
-            window.parent.postMessage(data.ip, "*");
-        });
-    </script>
-    <div id="client_ip" style="display: none;"></div>
-""", unsafe_allow_html=True)
 
 # Ajout des meta tags pour SEO et réseaux sociaux
 st.markdown("""
@@ -145,17 +132,13 @@ def main_page():
     # Section contact
     st.subheader("Contactez-nous")
 
+    # Utilisation de streamlit_js_eval pour obtenir l'IP du client
+    ip_address = streamlit_js_eval(js_expressions="fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => data.ip);")
+
     with st.form(key="contact_form"):
         name = st.text_input("Nom")
         email = st.text_input("Email")
         message = st.text_area("Message")
-
-        # Ajouter un champ pour récupérer l'IP du client depuis le script JS
-        if "ip_address" not in st.session_state:
-            st.session_state.ip_address = "IP inconnue"
-        
-        # Afficher l'IP dans Streamlit après réception
-        ip_address = st.session_state.ip_address
 
         submit_button = st.form_submit_button(label="Envoyer")
 
