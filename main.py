@@ -8,10 +8,18 @@ def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
+# Fonction pour obtenir l'adresse IP publique
+def get_ip():
+    try:
+        response = requests.get("https://api.ipify.org?format=json")
+        return response.json().get("ip", "IP inconnue")
+    except requests.RequestException:
+        return "Erreur lors de la récupération de l'IP"
+
 # Fonction pour enregistrer les messages dans un fichier texte
-def save_to_txt(name, email, message):
+def save_to_txt(name, email, message, ip):
     with open("contacts.txt", "a") as file:
-        file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\n\n")
+        file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\nIP: {ip}\n\n")
 
 # Fonction pour afficher les messages enregistrés
 def display_messages():
@@ -140,7 +148,8 @@ def main_page():
 
         if submit_button:
             if name and email and message:
-                save_to_txt(name, email, message)
+                ip = get_ip()
+                save_to_txt(name, email, message, ip)
                 st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
             else:
                 st.error("Veuillez remplir tous les champs.")
