@@ -9,19 +9,24 @@ def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Fonction pour enregistrer les messages dans un fichier texte
+# Fonction pour enregistrer les messages dans un fichier texte (Secret File)
 def save_to_txt(name, email, message, ip):
-    with open("contacts.txt", "a") as file:
-        file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\nIP: {ip}\n\n")
+    try:
+        with open("/etc/secrets/contacts.txt", "a") as file:
+            file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\nIP: {ip}\n\n")
+    except Exception as e:
+        st.error("Erreur lors de l'enregistrement du message. Veuillez vérifier les permissions ou la configuration.")
 
-# Fonction pour afficher les messages enregistrés
+# Fonction pour afficher les messages enregistrés (Secret File)
 def display_messages():
     try:
-        with open("contacts.txt", "r") as file:
+        with open("/etc/secrets/contacts.txt", "r") as file:
             messages = file.read()
         st.text_area("Messages enregistrés", messages, height=300)
     except FileNotFoundError:
         st.write("Aucun message trouvé.")
+    except Exception as e:
+        st.error("Erreur lors de la lecture du fichier. Veuillez vérifier les permissions ou la configuration.")
 
 # Charger les images
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
@@ -183,7 +188,6 @@ def main_page():
         name = st.text_input("Nom")
         email = st.text_input("Email")
         message = st.text_area("Message")
-
         submit_button = st.form_submit_button(label="Envoyer")
 
         if submit_button:
