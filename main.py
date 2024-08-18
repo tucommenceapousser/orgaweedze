@@ -73,7 +73,7 @@ st.markdown("""
 <p class="description">
 Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.
 Que vous soyez un nouveau venu ou un acteur établi sur le marché, nous vous aidons à structurer vos opérations,
-à optimiser vos routes de livraison, et à garantir une conformité légale optimale.
+à optimiser vos routes de livraison, et à garantir une securité optimale au niveau des risques judiciaires..
 </p>
 """, unsafe_allow_html=True)
 
