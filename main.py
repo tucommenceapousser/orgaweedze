@@ -2,38 +2,16 @@ import streamlit as st
 from PIL import Image
 import requests
 from io import BytesIO
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 # Fonction pour charger une image à partir d'une URL
 def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Fonction pour envoyer un email
-def send_email(subject, body, to_email):
-    from_email = "jelenacornut@gmail.com"  # Remplacez par votre adresse email
-    password = "B1gal2590"      # Remplacez par votre mot de passe d'email
-
-    msg = MIMEMultipart()
-    msg['From'] = from_email
-    msg['To'] = to_email
-    msg['Subject'] = subject
-
-    msg.attach(MIMEText(body, 'plain'))
-
-    try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(from_email, password)
-        text = msg.as_string()
-        server.sendmail(from_email, to_email, text)
-        server.quit()
-        return True
-    except Exception as e:
-        print(f"Erreur d'envoi d'email: {e}")
-        return False
+# Fonction pour enregistrer les messages dans un fichier texte
+def save_to_txt(name, email, message):
+    with open("contacts.txt", "a") as file:
+        file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\n\n")
 
 # Chargement des images
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
@@ -151,13 +129,8 @@ with st.form(key="contact_form"):
 
     if submit_button:
         if name and email and message:
-            # Envoyer l'email
-            if send_email(subject="Nouveau message de contact", 
-                          body=f"Nom: {name}\nEmail: {email}\n\nMessage:\n{message}", 
-                          to_email="jelenacornut@gmail.com"):
-                st.success(f"Merci {name}, votre message a bien été envoyé. Nous vous contacterons sous peu.")
-            else:
-                st.error("Une erreur est survenue lors de l'envoi de votre message.")
+            save_to_txt(name, email, message)
+            st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
         else:
             st.error("Veuillez remplir tous les champs.")
 
