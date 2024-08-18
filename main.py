@@ -40,13 +40,13 @@ st.markdown("""
         background-color: #f0f0f0;
     }
     .header {
-        font-size: 48px;
+        font-size: 36px;
         color: #4CAF50;
         text-align: center;
         font-weight: bold;
     }
     .subheader {
-        font-size: 24px;
+        font-size: 22px;
         color: #666666;
         text-align: center;
         margin-bottom: 50px;
@@ -60,7 +60,7 @@ st.markdown("""
     .footer {
         text-align: center;
         font-size: 14px;
-        color: #888888;
+        color: #ff0000;
         margin-top: 50px;
     }
     .btn {
