@@ -9,26 +9,30 @@ def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Fonction pour enregistrer les messages dans un fichier texte (Secret File)
+# Fonction pour enregistrer les messages dans un fichier texte
 def save_to_txt(name, email, message, ip):
     try:
-        with open("/etc/secrets/contacts.txt", "a") as file:
+        # Chemin ajusté pour le fichier (modifiez selon vos besoins)
+        file_path = "contacts.txt"  # ou "/tmp/contacts.txt" ou un chemin accessible en écriture
+        with open(file_path, "a") as file:
             file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\nIP: {ip}\n\n")
+        st.success("Message enregistré avec succès.")
     except Exception as e:
-        st.error("Erreur lors de l'enregistrement du message. Veuillez vérifier les permissions ou la configuration.")
+        st.error(f"Erreur lors de l'enregistrement du message: {e}")  # Afficher l'erreur
 
-# Fonction pour afficher les messages enregistrés (Secret File)
+# Fonction pour afficher les messages enregistrés
 def display_messages():
     try:
-        with open("/etc/secrets/contacts.txt", "r") as file:
+        file_path = "contacts.txt"  # Utilisez le même chemin que celui défini dans save_to_txt
+        with open(file_path, "r") as file:
             messages = file.read()
         st.text_area("Messages enregistrés", messages, height=300)
     except FileNotFoundError:
         st.write("Aucun message trouvé.")
     except Exception as e:
-        st.error("Erreur lors de la lecture du fichier. Veuillez vérifier les permissions ou la configuration.")
+        st.error(f"Erreur lors de la lecture du fichier: {e}")
 
-# Charger les images
+# Charger les images (gardez les mêmes URLs)
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
 header_image = load_image_from_url("https://j.top4top.io/p_3152e1dds3.jpeg")
 image_secure = load_image_from_url("https://i.top4top.io/p_3152ce61q2.png")
