@@ -216,8 +216,17 @@ PAGES = {
     "Administration": admin_page
 }
 
+def sidebar_about():
+    st.sidebar.markdown("## À propos")
+    st.sidebar.markdown("""
+        **Nom :** Trhacknon  
+        **Application :** Organisation de Réseaux de Vente de Hashish premium  
+        **Version :** 1.0  
+    """)
+
 def main():
     st.sidebar.title("Navigation")
+    sidebar_about()  # Appeler la fonction pour afficher l'info "À propos"
     selection = st.sidebar.radio("Aller à", list(PAGES.keys()))
     page = PAGES[selection]
     page()
