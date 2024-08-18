@@ -3,7 +3,6 @@ from PIL import Image
 import requests
 from io import BytesIO
 from streamlit_js_eval import streamlit_js_eval
-from dotenv import load_dotenv
 import os
 
 # Charger les variables d'environnement à partir du fichier .env
