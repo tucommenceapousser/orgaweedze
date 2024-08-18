@@ -6,7 +6,6 @@ from streamlit_js_eval import streamlit_js_eval
 import os
 
 # Charger les variables d'environnement à partir du fichier .env
-load_dotenv()
 
 # Récupérer le mot de passe depuis les variables d'environnement
 admin_password = os.getenv("MDP")
