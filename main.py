@@ -8,14 +8,6 @@ def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Fonction pour obtenir l'adresse IP publique via un service tiers
-def get_ip():
-    try:
-        response = requests.get("https://api.ipify.org?format=json")
-        return response.json().get("ip", "IP inconnue")
-    except requests.RequestException:
-        return "Erreur lors de la récupération de l'IP"
-
 # Fonction pour enregistrer les messages dans un fichier texte
 def save_to_txt(name, email, message, ip):
     with open("contacts.txt", "a") as file:
@@ -30,7 +22,7 @@ def display_messages():
     except FileNotFoundError:
         st.write("Aucun message trouvé.")
 
-# Chargement des images
+# Charger les images
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
 header_image = load_image_from_url("https://j.top4top.io/p_3152e1dds3.jpeg")
 image_secure = load_image_from_url("https://i.top4top.io/p_3152ce61q2.png")
@@ -41,6 +33,20 @@ image_legal = load_image_from_url("https://h.top4top.io/p_3152nmkk21.jpeg")
 st.set_page_config(page_title="Organisation de Réseaux de Vente de Hashish premium", 
                    page_icon="https://g.top4top.io/p_3152gg9qo0.jpg", 
                    layout="centered")
+
+# Ajouter du JavaScript pour obtenir l'IP du client
+st.markdown("""
+    <script>
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Envoyer l'IP au backend via Streamlit
+            document.getElementById("client_ip").innerText = data.ip;
+            window.parent.postMessage(data.ip, "*");
+        });
+    </script>
+    <div id="client_ip" style="display: none;"></div>
+""", unsafe_allow_html=True)
 
 # Ajout des meta tags pour SEO et réseaux sociaux
 st.markdown("""
@@ -144,14 +150,18 @@ def main_page():
         email = st.text_input("Email")
         message = st.text_area("Message")
 
-        # Ajouter un champ caché pour l'IP
-        ip = get_ip()
+        # Ajouter un champ pour récupérer l'IP du client depuis le script JS
+        if "ip_address" not in st.session_state:
+            st.session_state.ip_address = "IP inconnue"
+        
+        # Afficher l'IP dans Streamlit après réception
+        ip_address = st.session_state.ip_address
 
         submit_button = st.form_submit_button(label="Envoyer")
 
         if submit_button:
             if name and email and message:
-                save_to_txt(name, email, message, ip)
+                save_to_txt(name, email, message, ip_address)
                 st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
             else:
                 st.error("Veuillez remplir tous les champs.")
