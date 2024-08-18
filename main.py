@@ -60,6 +60,25 @@ st.markdown("""
         color: #4CAF50;
         text-align: center;
         font-weight: bold;
+        margin-bottom: 20px;
+        border: 3px solid #4CAF50;
+        border-radius: 10px;
+        padding: 20px;
+        transition: transform 0.3s;
+    }
+    .header:hover {
+        transform: scale(1.05);
+    }
+    .description {
+        text-align: center;
+        font-size: 18px;
+        color: #333333;
+        line-height: 1.6;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 50px;
     }
     .subheader {
         font-size: 22px;
@@ -67,11 +86,17 @@ st.markdown("""
         text-align: center;
         margin-bottom: 50px;
     }
-    .description {
+    .service-section {
         text-align: center;
-        font-size: 18px;
-        color: #4CAF50;
-        line-height: 1.6;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 15px;
+        background-color: #ffffff;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .service-section:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
     }
     .footer {
         text-align: center;
@@ -87,9 +112,21 @@ st.markdown("""
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.3s;
     }
     .btn:hover {
         background-color: #45a049;
+    }
+    .contact-form {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 50px;
+        transition: box-shadow 0.3s;
+    }
+    .contact-form:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -106,7 +143,7 @@ def main_page():
     <p class="description">
     Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.
     Que vous soyez un nouveau venu ou un acteur établi sur le marché, nous vous aidons à structurer vos opérations,
-    à optimiser vos routes de livraison, et à garantir une sécurité optimale au niveau des risques judiciaires..
+    à optimiser vos routes de livraison, et à garantir une sécurité optimale au niveau des risques judiciaires.
     </p>
     """, unsafe_allow_html=True)
 
@@ -115,19 +152,25 @@ def main_page():
     col1, col2, col3 = st.columns(3)
 
     with col1:
+        st.markdown('<div class="service-section">', unsafe_allow_html=True)
         st.image(image_secure, use_column_width=True)
         st.markdown("### Sécurisation des transactions")
         st.write("Nous assurons la sécurité de toutes vos transactions de hashish grâce à des protocoles avancés.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
+        st.markdown('<div class="service-section">', unsafe_allow_html=True)
         st.image(image_optimize, use_column_width=True)
         st.markdown("### Optimisation logistique")
         st.write("Nous optimisons vos routes de livraison pour garantir une efficacité maximale.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col3:
+        st.markdown('<div class="service-section">', unsafe_allow_html=True)
         st.image(image_legal, use_column_width=True)
         st.markdown("### Évitement des soucis judiciaires")
         st.write("Nous vous aidons à respecter les réglementations en vigueur sur la vente de hashish.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # Section contact
     st.subheader("Contactez-nous")
@@ -135,6 +178,7 @@ def main_page():
     # Utilisation de streamlit_js_eval pour obtenir l'IP du client
     ip_address = streamlit_js_eval(js_expressions="fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => data.ip);")
 
+    st.markdown('<div class="contact-form">', unsafe_allow_html=True)
     with st.form(key="contact_form"):
         name = st.text_input("Nom")
         email = st.text_input("Email")
@@ -148,6 +192,7 @@ def main_page():
                 st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
             else:
                 st.error("Veuillez remplir tous les champs.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Pied de page
     st.markdown("""
