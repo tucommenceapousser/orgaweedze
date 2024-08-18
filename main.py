@@ -3,6 +3,14 @@ from PIL import Image
 import requests
 from io import BytesIO
 from streamlit_js_eval import streamlit_js_eval
+from dotenv import load_dotenv
+import os
+
+# Charger les variables d'environnement à partir du fichier .env
+load_dotenv()
+
+# Récupérer le mot de passe depuis les variables d'environnement
+admin_password = os.getenv("MDP")
 
 # Fonction pour charger une image à partir d'une URL
 def load_image_from_url(url):
@@ -209,15 +217,14 @@ def main_page():
     </p>
     """, unsafe_allow_html=True)
 
-# Page protégée pour consulter les messages
+
 def admin_page():
     password = st.text_input("Mot de passe", type="password")
-    if password == "trkntrkn":
+    if password == admin_password:  # Comparer avec le mot de passe stocké dans .env
         st.title("Messages enregistrés")
         display_messages()
     else:
         st.warning("Mot de passe incorrect.")
-
 # Sélection de la page à afficher
 PAGES = {
     "Page principale": main_page,
