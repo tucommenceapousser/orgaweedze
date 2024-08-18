@@ -13,6 +13,15 @@ def save_to_txt(name, email, message):
     with open("contacts.txt", "a") as file:
         file.write(f"Nom: {name}\nEmail: {email}\nMessage: {message}\n\n")
 
+# Fonction pour afficher les messages enregistrés
+def display_messages():
+    try:
+        with open("contacts.txt", "r") as file:
+            messages = file.read()
+        st.text_area("Messages enregistrés", messages, height=300)
+    except FileNotFoundError:
+        st.write("Aucun message trouvé.")
+
 # Chargement des images
 logo = load_image_from_url("https://g.top4top.io/p_3152gg9qo0.jpg")
 header_image = load_image_from_url("https://j.top4top.io/p_3152e1dds3.jpeg")
@@ -84,59 +93,85 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Affichage du logo et de l'en-tête
-st.image(logo, use_column_width=True, width=150)
-st.markdown('<h1 class="header">Organisation et Sécurisation des Réseaux de Vente de Hashish premium</h1>', unsafe_allow_html=True)
-st.image(header_image, use_column_width=True)
+# Page principale
+def main_page():
+    # Affichage du logo et de l'en-tête
+    st.image(logo, use_column_width=True, width=150)
+    st.markdown('<h1 class="header">Organisation et Sécurisation des Réseaux de Vente de Hashish premium</h1>', unsafe_allow_html=True)
+    st.image(header_image, use_column_width=True)
 
-# Description du service
-st.markdown("""
-<p class="description">
-Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.
-Que vous soyez un nouveau venu ou un acteur établi sur le marché, nous vous aidons à structurer vos opérations,
-à optimiser vos routes de livraison, et à garantir une sécurité optimale au niveau des risques judiciaires..
-</p>
-""", unsafe_allow_html=True)
+    # Description du service
+    st.markdown("""
+    <p class="description">
+    Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.
+    Que vous soyez un nouveau venu ou un acteur établi sur le marché, nous vous aidons à structurer vos opérations,
+    à optimiser vos routes de livraison, et à garantir une sécurité optimale au niveau des risques judiciaires..
+    </p>
+    """, unsafe_allow_html=True)
 
-# Sections des services
-st.subheader("Nos Services")
-col1, col2, col3 = st.columns(3)
+    # Sections des services
+    st.subheader("Nos Services")
+    col1, col2, col3 = st.columns(3)
 
-with col1:
-    st.image(image_secure, use_column_width=True)
-    st.markdown("### Sécurisation des transactions")
-    st.write("Nous assurons la sécurité de toutes vos transactions de hashish grâce à des protocoles avancés.")
+    with col1:
+        st.image(image_secure, use_column_width=True)
+        st.markdown("### Sécurisation des transactions")
+        st.write("Nous assurons la sécurité de toutes vos transactions de hashish grâce à des protocoles avancés.")
 
-with col2:
-    st.image(image_optimize, use_column_width=True)
-    st.markdown("### Optimisation logistique")
-    st.write("Nous optimisons vos routes de livraison pour garantir une efficacité maximale.")
+    with col2:
+        st.image(image_optimize, use_column_width=True)
+        st.markdown("### Optimisation logistique")
+        st.write("Nous optimisons vos routes de livraison pour garantir une efficacité maximale.")
 
-with col3:
-    st.image(image_legal, use_column_width=True)
-    st.markdown("### Évitement des soucis judiciaires")
-    st.write("Nous vous aidons à respecter les réglementations en vigueur sur la vente de hashish.")
+    with col3:
+        st.image(image_legal, use_column_width=True)
+        st.markdown("### Évitement des soucis judiciaires")
+        st.write("Nous vous aidons à respecter les réglementations en vigueur sur la vente de hashish.")
 
-# Section contact
-st.subheader("Contactez-nous")
+    # Section contact
+    st.subheader("Contactez-nous")
 
-with st.form(key="contact_form"):
-    name = st.text_input("Nom")
-    email = st.text_input("Email")
-    message = st.text_area("Message")
+    with st.form(key="contact_form"):
+        name = st.text_input("Nom")
+        email = st.text_input("Email")
+        message = st.text_area("Message")
 
-    submit_button = st.form_submit_button(label="Envoyer")
+        submit_button = st.form_submit_button(label="Envoyer")
 
-    if submit_button:
-        if name and email and message:
-            save_to_txt(name, email, message)
-            st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
-        else:
-            st.error("Veuillez remplir tous les champs.")
+        if submit_button:
+            if name and email and message:
+                save_to_txt(name, email, message)
+                st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
+            else:
+                st.error("Veuillez remplir tous les champs.")
 
-# Pied de page
-st.markdown("""
-<p class="footer">
-© 2024 - Organisation des Réseaux de Vente de Hashish premium. Tous droits réservés.
-</p>
-""", unsafe_allow_html=True)
+    # Pied de page
+    st.markdown("""
+    <p class="footer">
+    © 2024 - Organisation des Réseaux de Vente de Hashish premium. Tous droits réservés.
+    </p>
+    """, unsafe_allow_html=True)
+
+# Page protégée pour consulter les messages
+def admin_page():
+    password = st.text_input("Mot de passe", type="password")
+    if password == "votre_mot_de_passe_secrêt":
+        st.title("Messages enregistrés")
+        display_messages()
+    else:
+        st.warning("Mot de passe incorrect.")
+
+# Sélection de la page à afficher
+PAGES = {
+    "Page principale": main_page,
+    "Administration": admin_page
+}
+
+def main():
+    st.sidebar.title("Navigation")
+    selection = st.sidebar.radio("Aller à", list(PAGES.keys()))
+    page = PAGES[selection]
+    page()
+
+if __name__ == "__main__":
+    main()
