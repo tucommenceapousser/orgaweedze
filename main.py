@@ -79,7 +79,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Affichage du logo et de l'en-tête
-st.image(logo, width=150)
+st.image(logo, use_column_width=True, width=150)
 st.markdown('<h1 class="header">Organisation et Sécurisation des Réseaux de Vente de Hashish premium</h1>', unsafe_allow_html=True)
 st.image(header_image, use_column_width=True)
 
