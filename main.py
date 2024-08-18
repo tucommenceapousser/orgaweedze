@@ -18,6 +18,23 @@ image_legal = load_image_from_url("https://h.top4top.io/p_3152nmkk21.jpeg")
 # Configuration de la page
 st.set_page_config(page_title="Organisation de Réseaux de Vente de CBD", page_icon="🌿", layout="centered")
 
+# Configuration de la page
+st.set_page_config(page_title="Organisation de Réseaux de Vente de CBD", page_icon="🌿", layout="centered")
+
+# Ajout des meta tags pour SEO et réseaux sociaux
+st.markdown("""
+    <meta name="description" content="Service complet pour organiser et sécuriser votre réseau de distribution de hashish premium.">
+    <meta name="keywords" content="hashish, CBD, réseau de vente, distribution, sécurité, optimisation logistique">
+    <meta property="og:title" content="Organisation de Réseaux de Vente de Hashish premium">
+    <meta property="og:description" content="Nous offrons un service complet pour organiser et sécuriser votre réseau de distribution de hashish.">
+    <meta property="og:image" content="https://g.top4top.io/p_3152gg9qo0.jpg">
+    <meta property="og:url" content="https://orgaweedze.onrender.com/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="https://g.top4top.io/p_3152gg9qo0.jpg">
+    <meta property="twitter:title" content="Organisation de Réseaux de Vente de Hashish premium">
+    <meta property="twitter:description" content="Service complet pour organiser et sécuriser votre réseau de distribution de hashish.">
+""", unsafe_allow_html=True)
+
 # Ajout de CSS personnalisé pour le style
 st.markdown("""
     <style>
