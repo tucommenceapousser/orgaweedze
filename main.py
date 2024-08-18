@@ -18,9 +18,6 @@ image_legal = load_image_from_url("https://h.top4top.io/p_3152nmkk21.jpeg")
 # Configuration de la page
 st.set_page_config(page_title="Organisation de Réseaux de Vente de CBD", page_icon="🌿", layout="centered")
 
-# Configuration de la page
-st.set_page_config(page_title="Organisation de Réseaux de Vente de CBD", page_icon="🌿", layout="centered")
-
 # Ajout des meta tags pour SEO et réseaux sociaux
 st.markdown("""
     <meta name="description" content="Service complet pour organiser et sécuriser votre réseau de distribution de hashish premium.">
