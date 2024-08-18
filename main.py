@@ -2,13 +2,14 @@ import streamlit as st
 from PIL import Image
 import requests
 from io import BytesIO
+import json
 
 # Fonction pour charger une image à partir d'une URL
 def load_image_from_url(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
 
-# Fonction pour obtenir l'adresse IP publique
+# Fonction pour obtenir l'adresse IP publique via un service tiers
 def get_ip():
     try:
         response = requests.get("https://api.ipify.org?format=json")
@@ -148,9 +149,25 @@ def main_page():
 
         if submit_button:
             if name and email and message:
-                ip = get_ip()
-                save_to_txt(name, email, message, ip)
-                st.success(f"Merci {name}, votre message a bien été enregistré. Nous vous contacterons sous peu.")
+                # Ajouter JavaScript pour obtenir l'IP du client
+                st.markdown("""
+                <script>
+                async function sendIP() {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    const ip = data.ip;
+                    const form = document.querySelector('form');
+                    const ipInput = document.createElement('input');
+                    ipInput.type = 'hidden';
+                    ipInput.name = 'ip';
+                    ipInput.value = ip;
+                    form.appendChild(ipInput);
+                    form.submit();
+                }
+                sendIP();
+                </script>
+                """, unsafe_allow_html=True)
+                st.experimental_rerun()  # Recharger la page après l'exécution du script
             else:
                 st.error("Veuillez remplir tous les champs.")
 
