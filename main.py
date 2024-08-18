@@ -155,7 +155,7 @@ def main_page():
 # Page protégée pour consulter les messages
 def admin_page():
     password = st.text_input("Mot de passe", type="password")
-    if password == "votre_mot_de_passe_secrêt":
+    if password == "trkntrkn":
         st.title("Messages enregistrés")
         display_messages()
     else:
